@@ -27,6 +27,12 @@ type ErrorLog struct {
 	ExceptionType string `json:"exceptionType,omitempty"`
 }
 
+func WriteHeader(rw http.ResponseWriter, statusCode int) http.ResponseWriter {
+	rw.Header().Set("Content-Type", "application/json")
+	rw.WriteHeader(statusCode)
+	return rw
+}
+
 func (m *Message) AddMessageDetails(sw time.Time) {
 	host, err := os.Hostname()
 	if err != nil {
@@ -45,6 +51,9 @@ func (m *Message) AddMessageDetails(sw time.Time) {
 
 func (errs ErrorLogs) GetHTTPStatus(lengthOfResults int) (status int) {
 	var s500, s400, s404, s206, s200 bool
+
+	s200 = len(errs) == 0
+
 	for _, e := range errs {
 		code, _ := strconv.Atoi(e.StatusCode)
 		switch {
