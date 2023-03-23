@@ -1,4 +1,4 @@
-module github.com/calebtracey/models
+module github.com/calebtraceyco/models
 
 go 1.20
 
